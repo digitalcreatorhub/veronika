@@ -14,6 +14,9 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0a2423">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 html { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 body { margin: 0; }
@@ -201,7 +204,14 @@ video { display: block; width: 100%; height: 100%; object-fit: contain; backgrou
   });
   var REVEAL = 15.2; /* seconds: the address is on screen from here */
   function reveal() { corner.classList.add('show'); }
+  /* full screen without the address bar (Android and desktop; iPhone Safari does not allow it for pages) */
+  function goFull() {
+    var el = document.documentElement, rq = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (!rq || document.fullscreenElement || document.webkitFullscreenElement) return;
+    try { var r = rq.call(el, { navigationUI: 'hide' }); if (r && r.catch) r.catch(function () {}); } catch (e) {}
+  }
   function start() {
+    goFull();
     play.classList.add('gone');
     var p = v.play(); if (p && p.catch) p.catch(function () { play.classList.remove('gone'); });
   }
